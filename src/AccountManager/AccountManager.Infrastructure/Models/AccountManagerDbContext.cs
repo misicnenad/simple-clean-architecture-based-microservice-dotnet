@@ -13,9 +13,6 @@ namespace AccountManager.Infrastructure.Models
         {
             base.OnModelCreating(modelBuilder);
 
-            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-
-            var i = Assembly.GetExecutingAssembly();
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }

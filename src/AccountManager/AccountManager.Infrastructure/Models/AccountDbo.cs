@@ -11,6 +11,17 @@ namespace AccountManager.Infrastructure.Models
         public int UserId { get; set; }
         public AccountType AccountType { get; set; }
         public DateTime DateCreated { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is AccountDbo dbo &&
+                   AccountId == dbo.AccountId;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(AccountId, UserId, AccountType, DateCreated);
+        }
     }
 
     public class AccountDboConfiguration : IEntityTypeConfiguration<AccountDbo>

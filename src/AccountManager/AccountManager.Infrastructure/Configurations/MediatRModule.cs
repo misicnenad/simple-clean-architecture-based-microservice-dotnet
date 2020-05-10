@@ -11,7 +11,7 @@ namespace AccountManager.Infrastructure.Configurations
             builder.RegisterAssemblyTypes(typeof(IMediator).Assembly)
                 .AsImplementedInterfaces();
 
-            builder.RegisterAssemblyTypes(typeof(ICommand).Assembly)
+            builder.RegisterAssemblyTypes(typeof(Command).Assembly)
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
             builder.Register<ServiceFactory>(ctx =>

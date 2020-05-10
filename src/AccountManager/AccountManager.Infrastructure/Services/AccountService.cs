@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AccountManager.Domain.Interfaces;
 using AccountManager.Domain.Models;
 using AccountManager.Infrastructure.Models;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace AccountManager.Infrastructure.Services
 {
@@ -40,6 +43,20 @@ namespace AccountManager.Infrastructure.Services
             _logger.LogInfo(correlationId, $"{nameof(Account)} saved with {nameof(Account.AccountId)}={entity.AccountId}");
 
             return _mapper.Map<Account>(entity);
+        }
+
+        public async Task<IEnumerable<Account>> GetAllByUserIdAsync(Guid correlationId, int userId, CancellationToken ct = default)
+        {
+            _logger.LogInfo(correlationId, $"Executing {nameof(AccountService)}.{nameof(AccountService.GetAllByUserIdAsync)}");
+
+            var accounts = await _dbContext.Accounts
+                .Where(a => a.UserId == userId)
+                .AsNoTracking()
+                .ToListAsync();
+
+            _logger.LogInfo(correlationId, $"Fetched {accounts.Count} {nameof(accounts)}");
+
+            return _mapper.Map<IEnumerable<Account>>(accounts);
         }
     }
 }
