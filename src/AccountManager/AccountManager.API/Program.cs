@@ -54,7 +54,6 @@ namespace AccountManager.API
                 {
                     builder.RegisterModule(new AutoMapperModule(typeof(InfrastructureModule).Assembly));
                     builder.RegisterModule<InfrastructureModule>();
-                    builder.RegisterModule<MediatRModule>();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

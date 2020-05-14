@@ -10,18 +10,18 @@ namespace AccountManager.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountsController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
 
-        public AccountsController(IMediator mediator, IMapper mapper)
+        public UsersController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
             _mapper = mapper;
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("{userId}/accounts")]
         public async Task<ActionResult<IEnumerable<AccountDto>>> GetAccountsByUserIdAsync(int userId)
         {
             var query = new GetAccountsByUserId(userId);

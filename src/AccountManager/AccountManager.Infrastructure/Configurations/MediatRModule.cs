@@ -4,7 +4,7 @@ using AccountManager.Domain.Commands;
 
 namespace AccountManager.Infrastructure.Configurations
 {
-    public class MediatRModule : Module
+    internal class MediatRModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

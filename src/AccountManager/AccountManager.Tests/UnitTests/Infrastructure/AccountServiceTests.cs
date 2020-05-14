@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AccountManager.Domain.Interfaces;
 using AccountManager.Domain.Models;
 using AccountManager.Infrastructure.Models;
 using AccountManager.Infrastructure.Services;
@@ -14,13 +15,11 @@ namespace AccountManager.Tests.UnitTests.Infrastructure
 {
     public class AccountServiceTests : IAsyncDisposable
     {
-        private readonly ILoggerService<AccountService> _mockLoggerObject;
         private readonly Mock<IMapper> _mockMapper;
         private readonly AccountManagerDbContext _dbContext;
 
         public AccountServiceTests()
         {
-            _mockLoggerObject = new Mock<ILoggerService<AccountService>>().Object;
             _mockMapper = new Mock<IMapper>();
 
             var options = new DbContextOptionsBuilder<AccountManagerDbContext>()
@@ -64,7 +63,7 @@ namespace AccountManager.Tests.UnitTests.Infrastructure
             _mockMapper.Setup(m => m.Map<Account>(It.IsAny<AccountDbo>()))
                 .Returns(expectedAccount);
 
-            var service = new AccountService(_mockLoggerObject, _mockMapper.Object, _dbContext);
+            var service = new AccountService(_mockMapper.Object, _dbContext);
 
             // Act
             var correlationId = Guid.NewGuid();
@@ -126,7 +125,7 @@ namespace AccountManager.Tests.UnitTests.Infrastructure
                         It.Is<List<AccountDbo>>(accounts => accounts.All(a => accountDbos.Contains(a)))))
                 .Returns(expectedAccounts);
 
-            var service = new AccountService(_mockLoggerObject, _mockMapper.Object, _dbContext);
+            var service = new AccountService(_mockMapper.Object, _dbContext);
 
             // Act
             var actualAccounts = await service.GetAllByUserIdAsync(correlationId: Guid.NewGuid(), userId);
@@ -166,7 +165,7 @@ namespace AccountManager.Tests.UnitTests.Infrastructure
                         It.Is<List<AccountDbo>>(accountDbos => !accountDbos.Any())))
                 .Returns(expectedAccounts);
 
-            var service = new AccountService(_mockLoggerObject, _mockMapper.Object, _dbContext);
+            var service = new AccountService(_mockMapper.Object, _dbContext);
 
             // Act
             var nonExistentUserId = 3;

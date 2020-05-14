@@ -1,8 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+
 using AccountManager.Infrastructure.Models;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -30,9 +31,8 @@ namespace AccountManager.API
             services.AddApplicationInsightsTelemetry();
             services.AddControllers();
 
-            services.AddHttpClient();
-
-            // Uncomment the line below when doing DB migrations/updates
+            // DbContext is registered here because Autofac doesn't support EF migrations.
+            // Also mocking the DB with an in-memory DB for tests is easier
             services.AddDbContext<AccountManagerDbContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("AccountManagerDbConnectionString")));
 

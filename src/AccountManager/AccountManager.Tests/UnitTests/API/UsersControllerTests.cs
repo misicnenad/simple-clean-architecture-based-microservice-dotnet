@@ -2,26 +2,30 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+
 using AccountManager.API.Controllers;
 using AccountManager.API.Models;
 using AccountManager.Domain.Models;
 using AccountManager.Domain.Queries;
-using AccountManager.Infrastructure.Models;
+
 using AutoMapper;
 
 using MediatR;
+
 using Microsoft.AspNetCore.Mvc;
+
 using Moq;
+
 using Xunit;
 
 namespace AccountManager.Tests.UnitTests.API
 {
-    public class AccountsControllerTests
+    public class UsersControllerTests
     {
         private readonly Mock<IMediator> _mockMediator;
         private readonly Mock<IMapper> _mockMapper;
 
-        public AccountsControllerTests()
+        public UsersControllerTests()
         {
             _mockMediator = new Mock<IMediator>();
             _mockMapper = new Mock<IMapper>();
@@ -76,7 +80,7 @@ namespace AccountManager.Tests.UnitTests.API
                     It.Is<IEnumerable<Account>>(accs => accs == expectedAccounts)))
                 .Returns(expectedAccountDtos);
 
-            var controller = new AccountsController(_mockMediator.Object, _mockMapper.Object);
+            var controller = new UsersController(_mockMediator.Object, _mockMapper.Object);
 
             // Act
             var actionResult = await controller.GetAccountsByUserIdAsync(userId);
@@ -84,7 +88,7 @@ namespace AccountManager.Tests.UnitTests.API
             // Assert
             var result = actionResult?.Result as OkObjectResult;
             Assert.NotNull(result);
-            
+
             Assert.Equal(expectedAccountDtos, result.Value);
         }
 
@@ -103,7 +107,7 @@ namespace AccountManager.Tests.UnitTests.API
                     It.Is<IEnumerable<Account>>(accs => accs == expectedAccounts)))
                 .Returns(expectedAccountDtos);
 
-            var controller = new AccountsController(_mockMediator.Object, _mockMapper.Object);
+            var controller = new UsersController(_mockMediator.Object, _mockMapper.Object);
 
             // Act
             var actionResult = await controller.GetAccountsByUserIdAsync(userId);

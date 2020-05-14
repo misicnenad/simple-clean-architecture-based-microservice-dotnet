@@ -1,19 +1,17 @@
 ﻿using System.IO;
 using System.Net.Http;
+
+using AccountManager.API;
+using AccountManager.API.Configurations;
+using AccountManager.Infrastructure.Configurations;
+
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Moq;
-using AccountManager.API;
-using AccountManager.API.Configurations;
-using AccountManager.Domain.Interfaces;
-using AccountManager.Infrastructure.Configurations;
-using System;
 
 namespace AccountManager.Tests.IntegrationTests
 {
@@ -38,18 +36,25 @@ namespace AccountManager.Tests.IntegrationTests
                 {
                     builder.RegisterModule(new AutoMapperModule(typeof(InfrastructureModule).Assembly));
                     builder.RegisterModule<InfrastructureModule>();
-                    builder.RegisterModule<MediatRModule>();
-
-                    // Mock the event service so no events are sent to EventHub
-                    var mockHttpClient = new Mock<IHttpClientFactory>().Object;
-                    builder.Register(c => mockHttpClient).As<IHttpClientFactory>();
                 })
                 .ConfigureWebHost(conf =>
                 {
                     conf.UseTestServer();
-                    conf.UseStartup<Startup>();
+                    conf.UseStartup<TestStartup>();
                     conf.UseConfiguration(config);
+
+                    // Ignore the TestStartup class assembly as the "entry point" and 
+                    // instead point it to this assembly
+                    conf.UseSetting(WebHostDefaults.ApplicationKey, typeof(Program).Assembly.FullName);
                 });
+        }
+    }
+
+    internal static class Extensions
+    {
+        internal static TResult Resolve<TResult>(this IHost host)
+        {
+            return host.Services.GetAutofacRoot().Resolve<TResult>();
         }
     }
 }
