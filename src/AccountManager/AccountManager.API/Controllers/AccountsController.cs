@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using AccountManager.API.Models;
+using AccountManager.Domain.Queries;
+using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AccountManager.API.Controllers
@@ -11,5 +12,23 @@ namespace AccountManager.API.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
+        private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
+
+        public AccountsController(IMediator mediator, IMapper mapper)
+        {
+            _mediator = mediator;
+            _mapper = mapper;
+        }
+
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<IEnumerable<AccountDto>>> GetAccountsByUserIdAsync(int userId)
+        {
+            var query = new GetAccountsByUserId(userId);
+
+            var accounts = await _mediator.Send(query);
+
+            return Ok(_mapper.Map<IEnumerable<AccountDto>>(accounts));
+        }
     }
 }

@@ -53,8 +53,4 @@
     <ProjectReference Include="..\AccountManager.Infrastructure\AccountManager.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UnitTests\API\" />
-  </ItemGroup>
-
 </Project>

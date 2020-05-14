@@ -5,6 +5,7 @@
 
 appsettings.Development.json
 appsettings.Staging.json
+TODO.txt
 
 # User-specific files
 *.rsuser
