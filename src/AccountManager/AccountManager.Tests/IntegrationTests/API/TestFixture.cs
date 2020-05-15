@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Net.Http;
 
 using AccountManager.API;
 using AccountManager.API.Configurations;
@@ -19,15 +18,11 @@ namespace AccountManager.Tests.IntegrationTests.API
     {
         protected readonly IHostBuilder hostBuilder;
 
-        protected IHost host;
-        protected HttpClient client;
-
         protected TestFixture()
         {
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.Staging.json", optional: true)
                 .Build();
 
             hostBuilder = new HostBuilder()
