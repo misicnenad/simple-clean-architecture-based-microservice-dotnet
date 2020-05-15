@@ -7,7 +7,8 @@ namespace AccountManager.Domain.Validators
     {
         public CreateAccountValidator()
         {
-            RuleFor(x => x.UserId).NotEmpty();
+            const int minimumValidUserId = 1;
+            RuleFor(x => x.UserId).GreaterThanOrEqualTo(minimumValidUserId);
             RuleFor(x => x.AccountType).NotEmpty();
         }
     }

@@ -1,33 +1,28 @@
 ﻿using System.IO;
-using System.Net.Http;
-
-using AccountManager.API;
-using AccountManager.API.Configurations;
-using AccountManager.Infrastructure.Configurations;
-
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using AccountManager.Worker.Configurations;
+using AccountManager.Infrastructure.Configurations;
+using AccountManager.Infrastructure.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
 
-namespace AccountManager.Tests.IntegrationTests
+namespace AccountManager.Tests.IntegrationTests.Worker
 {
     public abstract class TestFixture
     {
         protected readonly IHostBuilder hostBuilder;
-
-        protected IHost host;
-        protected HttpClient client;
 
         protected TestFixture()
         {
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.Staging.json", optional: true)
                 .Build();
 
             hostBuilder = new HostBuilder()
@@ -36,25 +31,23 @@ namespace AccountManager.Tests.IntegrationTests
                 {
                     builder.RegisterModule(new AutoMapperModule(typeof(InfrastructureModule).Assembly));
                     builder.RegisterModule<InfrastructureModule>();
+                    //builder.RegisterModule<TestWorkerModule>();
+                })
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddHostedService<AccountManager.Worker.Worker>();
+                    services.AddHttpClient();
+
+                    var dbName = Guid.NewGuid().ToString();
+                    services.AddDbContext<AccountManagerDbContext>(opt =>
+                        opt.UseInMemoryDatabase(dbName));
                 })
                 .ConfigureWebHost(conf =>
                 {
                     conf.UseTestServer();
-                    conf.UseStartup<TestStartup>();
+                    conf.Configure(_ => { });
                     conf.UseConfiguration(config);
-
-                    // Ignore the TestStartup class assembly as the "entry point" and 
-                    // instead point it to this assembly
-                    conf.UseSetting(WebHostDefaults.ApplicationKey, typeof(Program).Assembly.FullName);
                 });
-        }
-    }
-
-    internal static class Extensions
-    {
-        internal static TResult Resolve<TResult>(this IHost host)
-        {
-            return host.Services.GetAutofacRoot().Resolve<TResult>();
         }
     }
 }

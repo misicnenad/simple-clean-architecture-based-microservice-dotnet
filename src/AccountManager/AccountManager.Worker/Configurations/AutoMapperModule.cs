@@ -1,10 +1,11 @@
-﻿using System.Reflection;
-using AccountManager.API.Models;
-using AccountManager.Domain.Models;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using Autofac;
 using AutoMapper;
+using AccountManager.Domain.Commands;
+using Shared.Messages;
 
-namespace AccountManager.API.Configurations
+namespace AccountManager.Worker.Configurations
 {
     public class AutoMapperModule : Autofac.Module
     {
@@ -21,7 +22,7 @@ namespace AccountManager.API.Configurations
             {
                 cfg.AddMaps(_profileAssemblies);
 
-                cfg.CreateMap<Account, AccountDto>();
+                cfg.CreateMap<CreateAccountMessage, CreateAccount>();
             });
 
             builder.RegisterInstance(config).As<IConfigurationProvider>().ExternallyOwned();

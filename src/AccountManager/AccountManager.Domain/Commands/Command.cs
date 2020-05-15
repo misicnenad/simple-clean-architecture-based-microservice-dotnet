@@ -4,7 +4,7 @@ using MediatR;
 namespace AccountManager.Domain.Commands
 {
     public interface ICommandHandler<in TCommand> : IRequestHandler<TCommand> where TCommand : Command
-    { 
+    {
     }
 
     public interface ICommandHandler<in TCommand, TResult>
@@ -12,9 +12,17 @@ namespace AccountManager.Domain.Commands
     {
     }
 
-    public abstract class Command : BaseCommand, IRequest { }
+    public abstract class Command : BaseCommand, IRequest
+    {
+        protected Command() { }
+        protected Command(Guid correlationId) : base(correlationId) { }
+    }
 
-    public abstract class Command<TResponse> : BaseCommand, IRequest<TResponse> { }
+    public abstract class Command<TResponse> : BaseCommand, IRequest<TResponse>
+    {
+        protected Command() { }
+        protected Command(Guid correlationId) : base(correlationId) { }
+    }
 
     public abstract class BaseCommand
     {

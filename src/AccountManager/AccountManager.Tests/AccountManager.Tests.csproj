@@ -7,16 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="appsettings.Staging.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="appsettings.Staging.json">
-      <DependentUpon>appsettings.json</DependentUpon>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -33,6 +23,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.3" />
     <PackageReference Include="Moq" Version="4.13.1" />
+    <PackageReference Include="Rebus.Events" Version="4.0.2" />
     <PackageReference Include="ReportGenerator" Version="4.4.6" />
     <PackageReference Include="ReportGenerator.Core" Version="4.4.6" />
     <PackageReference Include="xunit" Version="2.4.0" />
@@ -51,6 +42,7 @@
     <ProjectReference Include="..\AccountManager.API\AccountManager.API.csproj" />
     <ProjectReference Include="..\AccountManager.Domain\AccountManager.Domain.csproj" />
     <ProjectReference Include="..\AccountManager.Infrastructure\AccountManager.Infrastructure.csproj" />
+    <ProjectReference Include="..\AccountManager.Worker\AccountManager.Worker.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using AccountManager.Domain.Interfaces;
 using AccountManager.Domain.Models;
@@ -32,9 +33,17 @@ namespace AccountManager.Domain.Commands
             return newAccount;
         }
     }
+
     public class CreateAccount : Command<Account>
     {
         public CreateAccount(int userId, AccountType accountType)
+        {
+            UserId = userId;
+            AccountType = accountType;
+        }
+
+        public CreateAccount(Guid correlationId, int userId, AccountType accountType)
+            : base(correlationId)
         {
             UserId = userId;
             AccountType = accountType;

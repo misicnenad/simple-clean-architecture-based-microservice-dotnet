@@ -1,4 +1,5 @@
 ﻿using AccountManager.Domain.Interfaces;
+using AccountManager.Domain.Providers;
 using AccountManager.Domain.Validators;
 using AccountManager.Infrastructure.Services;
 
@@ -16,6 +17,8 @@ namespace AccountManager.Infrastructure.Configurations
                 .AsClosedTypesOf(typeof(Validator<>));
 
             builder.RegisterType<AccountService>().As<IAccountService>();
+
+            builder.RegisterType<DateTimeProvider>().SingleInstance();
         }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AccountManager.Tests.IntegrationTests
+namespace AccountManager.Tests.IntegrationTests.API
 {
     public class TestStartup
     {
