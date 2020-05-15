@@ -5,16 +5,8 @@ using FluentValidation;
 namespace AccountManager.Domain.Validators
 {
     // Abstract class containing methods used for mocking in tests (extension methods can't be mocked)
-    public abstract class Validator<T> : AbstractValidator<T>
-    {
-        public virtual void ValidateAndThrow(T instance)
-        {
-            this.ValidateAndThrow(instance, null);
-        }
-    }
-
     public abstract class QueryValidator<TQuery, TQueryResult> 
-        : Validator<TQuery> where TQuery : Query<TQueryResult>
+        : AbstractValidator<TQuery> where TQuery : Query<TQueryResult>
     {
         protected QueryValidator()
         {
@@ -23,7 +15,7 @@ namespace AccountManager.Domain.Validators
         }
     }
 
-    public abstract class CommandValidator<T> : Validator<T> where T : BaseCommand
+    public abstract class CommandValidator<T> : AbstractValidator<T> where T : BaseCommand
     {
         protected CommandValidator()
         {

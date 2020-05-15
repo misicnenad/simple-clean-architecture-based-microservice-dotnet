@@ -5,6 +5,10 @@ using AccountManager.Infrastructure.Services;
 
 using Autofac;
 
+using FluentValidation;
+
+using MediatR;
+
 namespace AccountManager.Infrastructure.Configurations
 {
     public class InfrastructureModule : Module
@@ -13,8 +17,11 @@ namespace AccountManager.Infrastructure.Configurations
         {
             builder.RegisterModule<MediatRModule>();
 
-            builder.RegisterAssemblyTypes(typeof(Validator<>).Assembly)
-                .AsClosedTypesOf(typeof(Validator<>));
+            builder.RegisterAssemblyTypes(typeof(CommandValidator<>).Assembly)
+                .AsClosedTypesOf(typeof(IValidator<>));
+
+            builder.RegisterGeneric(typeof(ValidationBehavior<,>))
+                  .As(typeof(IPipelineBehavior<,>));
 
             builder.RegisterType<AccountService>().As<IAccountService>();
 
