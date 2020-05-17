@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AccountManager.Infrastructure.Models;
 using AccountManager.Tests.IntegrationTests.API;
 using AccountManager.Worker.Handlers;
+
 using Autofac;
 
 using Microsoft.Extensions.Hosting;
@@ -14,7 +15,6 @@ using Microsoft.Extensions.Hosting;
 using Rebus.Activation;
 using Rebus.Bus;
 using Rebus.Config;
-using Rebus.Handlers;
 using Rebus.Persistence.InMem;
 using Rebus.Retry.Simple;
 using Rebus.Transport.InMem;
@@ -42,7 +42,7 @@ namespace AccountManager.Tests.IntegrationTests.Worker
 
             hostBuilder.ConfigureContainer<ContainerBuilder>(builder =>
             {
-                builder.RegisterRebus((configurer, context) =>
+                builder.RegisterRebus((configurer, _) =>
                 {
                     return configurer
                             .Transport(t => t.UseInMemoryTransport(network, _queueName))
@@ -50,7 +50,7 @@ namespace AccountManager.Tests.IntegrationTests.Worker
                             .Options(b => b.SimpleRetryStrategy(maxDeliveryAttempts: 1))
                             .Events(e =>
                             {
-                                e.AfterMessageHandled += (bus, headers, msg, ctx, args) => _messageProccessedEvent.Set();
+                                e.AfterMessageHandled += (bus, hdrs, msg, ctx, args) => _messageProccessedEvent.Set();
                             });
                 });
 
