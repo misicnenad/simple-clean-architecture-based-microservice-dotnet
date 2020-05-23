@@ -11,4 +11,14 @@ namespace UserManager.Domain
     {
         Task<TResponse> HandleAsync(TRequest request, CancellationToken ct = default);
     }
+
+    public interface IRequest : IRequest<Void>
+    {
+    }
+
+    public interface IRequest<out TResponse>
+    {
+    }
+
+    public class Void { }
 }
