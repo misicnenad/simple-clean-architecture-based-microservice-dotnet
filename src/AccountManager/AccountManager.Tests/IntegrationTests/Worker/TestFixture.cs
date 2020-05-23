@@ -23,11 +23,6 @@ namespace AccountManager.Tests.IntegrationTests.Worker
 
         protected TestFixture()
         {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-
             hostBuilder = new HostBuilder()
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureContainer<ContainerBuilder>(builder =>
@@ -47,7 +42,6 @@ namespace AccountManager.Tests.IntegrationTests.Worker
                 {
                     conf.UseTestServer();
                     conf.Configure(_ => { });
-                    conf.UseConfiguration(config);
                 });
         }
     }
