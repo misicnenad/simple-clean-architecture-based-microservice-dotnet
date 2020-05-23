@@ -1,7 +1,7 @@
 # A Simple Clean Architecture Based Microservice (.NET)
 A simple "Clean Architecture" based microservices, written in .NET, created as a simple reference on how things can, to put it in simple terms, be done simply.
 
-Created for personal and communities knowledge reference.
+<i>Created for personal and communities knowledge reference.</i>
 
 Consists of two microservices with slightly different development philosophies:
 - AccountManager - "dirtier" but simple Clean Architecture; even though it has third-party libraries (MediatR) in the Domain project it does it's job quite well 
