@@ -9,6 +9,7 @@ namespace UserManager.Infrastructure.Models
         public int AccountId { get; set; }
         public int UserId { get; set; }
         public DateTime DateCreated { get; set; }
+        public UserDbo User { get; set; }
     }
 
     public class AccountDboConfiguration : IEntityTypeConfiguration<AccountDbo>

@@ -31,6 +31,11 @@ namespace UserManager.Infrastructure.Models
                 .HasMaxLength(100)
                 .IsRequired();
 
+            builder.HasMany(x => x.Accounts)
+                .WithOne(x => x.User)
+                .HasForeignKey(x => x.UserId)
+                .IsRequired();
+
             builder.Property(x => x.DateCreated)
                 .HasDefaultValueSql("getutcdate()");
         }

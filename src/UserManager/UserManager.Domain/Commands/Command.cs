@@ -2,7 +2,7 @@
 
 namespace UserManager.Domain.Commands
 {
-    public abstract class Command : BaseCommand, IRequest
+    public abstract class Command : Command<Void>
     {
         protected Command() { }
         protected Command(Guid correlationId) : base(correlationId) { }

@@ -17,7 +17,7 @@ namespace UserManager.Domain.Validators
             _validators = validators;
         }
 
-        public Task HandleAsync(TRequest request, RequestHandlerDelegate next, CancellationToken ct = default)
+        public Task<Void> HandleAsync(TRequest request, RequestHandlerDelegate<Void> next, CancellationToken ct = default)
         {
             var context = new ValidationContext(request);
             var failures = _validators

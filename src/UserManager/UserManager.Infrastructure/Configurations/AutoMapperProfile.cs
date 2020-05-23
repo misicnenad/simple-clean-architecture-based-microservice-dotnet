@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using UserManager.Domain.Models;
+using UserManager.Infrastructure.Models;
 
 namespace UserManager.Infrastructure.Configurations
 {
@@ -6,7 +8,8 @@ namespace UserManager.Infrastructure.Configurations
     {
         public AutoMapperProfile()
         {
-            
+            CreateMap<UserDbo, User>();
+            CreateMap<AccountDbo, Account>();
         }
     }
 }

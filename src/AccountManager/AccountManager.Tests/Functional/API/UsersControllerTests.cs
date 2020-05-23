@@ -13,7 +13,7 @@ using Microsoft.Extensions.Hosting;
 
 using Xunit;
 
-namespace AccountManager.Tests.IntegrationTests.API
+namespace AccountManager.Tests.Functional.API
 {
     public class UsersControllerTests : TestFixture
     {

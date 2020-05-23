@@ -4,9 +4,9 @@ using UserManager.Domain.Commands;
 namespace UserManager.Domain
 {
     public abstract class CommandHandler<TCommand>
-        : BaseRequestHandler<TCommand> where TCommand : Command
+        : BaseRequestHandler<TCommand, Void> where TCommand : Command
     {
-        protected CommandHandler(IEnumerable<IPreProcessHandler<TCommand>> preProcessHandlers) : 
+        protected CommandHandler(IEnumerable<IPreProcessHandler<TCommand, Void>> preProcessHandlers) : 
             base(preProcessHandlers)
         {
         }

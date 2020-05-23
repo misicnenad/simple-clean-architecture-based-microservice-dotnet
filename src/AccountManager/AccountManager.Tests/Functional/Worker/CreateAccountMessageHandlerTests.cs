@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using AccountManager.Infrastructure.Models;
-using AccountManager.Tests.IntegrationTests.API;
 using AccountManager.Worker.Handlers;
 
 using Autofac;
@@ -23,7 +22,7 @@ using Shared.Messages;
 
 using Xunit;
 
-namespace AccountManager.Tests.IntegrationTests.Worker
+namespace AccountManager.Tests.Functional.Worker
 {
     public class CreateAccountMessageHandlerTests : TestFixture
     {

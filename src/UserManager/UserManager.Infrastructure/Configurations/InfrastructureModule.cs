@@ -5,6 +5,8 @@ using UserManager.Domain.Validators;
 using Autofac;
 
 using FluentValidation;
+using UserManager.Infrastructure.Services;
+using UserManager.Domain.Interfaces;
 
 namespace UserManager.Infrastructure.Configurations
 {
@@ -13,6 +15,8 @@ namespace UserManager.Infrastructure.Configurations
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterModule<MediatRModule>();
+
+            builder.RegisterType<UserService>().As<IUserService>();
 
             builder.RegisterAssemblyTypes(typeof(CommandValidator<>).Assembly)
                 .AsClosedTypesOf(typeof(IValidator<>));

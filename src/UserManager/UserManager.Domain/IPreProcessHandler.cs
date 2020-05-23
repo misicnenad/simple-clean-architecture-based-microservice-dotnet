@@ -3,9 +3,8 @@ using System.Threading;
 
 namespace UserManager.Domain
 {
-    public interface IPreProcessHandler<TRequest> where TRequest : IRequest
+    public interface IPreProcessHandler<TRequest> : IPreProcessHandler<TRequest, Void> where TRequest : IRequest
     {
-        Task HandleAsync(TRequest request, RequestHandlerDelegate next, CancellationToken ct = default);
     }
 
     public interface IPreProcessHandler<TRequest, TResponse> where TRequest : IRequest<TResponse>

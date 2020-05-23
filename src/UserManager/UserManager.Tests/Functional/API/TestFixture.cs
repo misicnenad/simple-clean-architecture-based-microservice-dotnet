@@ -1,18 +1,15 @@
-﻿using System.IO;
-
-using AccountManager.API;
-using AccountManager.API.Configurations;
-using AccountManager.Infrastructure.Configurations;
+﻿using UserManager.API;
+using UserManager.API.Configurations;
+using UserManager.Infrastructure.Configurations;
 
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
-namespace AccountManager.Tests.IntegrationTests.API
+namespace UserManager.Tests.Functional.API
 {
     public abstract class TestFixture
     {
@@ -36,14 +33,6 @@ namespace AccountManager.Tests.IntegrationTests.API
                     // instead point it to this assembly
                     conf.UseSetting(WebHostDefaults.ApplicationKey, typeof(Program).Assembly.FullName);
                 });
-        }
-    }
-
-    internal static class Extensions
-    {
-        internal static TResult Resolve<TResult>(this IHost host)
-        {
-            return host.Services.GetAutofacRoot().Resolve<TResult>();
         }
     }
 }
