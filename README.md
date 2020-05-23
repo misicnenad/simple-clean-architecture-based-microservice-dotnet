@@ -10,8 +10,8 @@ Consists of two microservices with slightly different development philosophies:
 Identity Service + Authentication + Authorization are on the way.
 
 -----------------------------------------------------------------------------------------------------------------------------------------------
-"Simplicity" cannot be overstated.
+<i>"Simplicity" cannot be overstated.
 
 Elegancy is what we're trying to achieve.
 
-Elegancy through Simplicity.
+Elegancy through Simplicity.</i>
