@@ -1,21 +1,29 @@
 ﻿using System.Threading.Tasks;
 using System.Threading;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace UserManager.Domain
 {
     public abstract class BaseRequestHandler<TRequest> : IRequestHandler<TRequest>
         where TRequest : IRequest
     {
-        private readonly IPreProcessHandler<TRequest> _preProcessHandler;
+        private readonly IEnumerable<IPreProcessHandler<TRequest>> _preProcessHandlers;
 
-        protected BaseRequestHandler(IPreProcessHandler<TRequest> preProcessHandler)
+        protected BaseRequestHandler(IEnumerable<IPreProcessHandler<TRequest>> preProcessHandlers)
         {
-            _preProcessHandler = preProcessHandler;
+            _preProcessHandlers = preProcessHandlers;
         }
 
-        public async Task HandleAsync(TRequest request, CancellationToken ct = default)
+        public Task HandleAsync(TRequest request, CancellationToken ct = default)
         {
-            await _preProcessHandler.HandleAsync(request, HandlerInternalAsync, ct);
+            Task handler() => HandlerInternalAsync(request, ct);
+            
+            return _preProcessHandlers
+                .Aggregate(
+                    (RequestHandlerDelegate)handler,
+                    (next, pipeline) => () => pipeline.HandleAsync(request, next, ct)
+                )();
         }
 
         protected abstract Task HandlerInternalAsync(TRequest request, CancellationToken ct = default);
@@ -24,16 +32,22 @@ namespace UserManager.Domain
     public abstract class BaseRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        private readonly IPreProcessHandler<TRequest, TResponse> _preProcessHandler;
+        private readonly IEnumerable<IPreProcessHandler<TRequest, TResponse>> _preProcessHandlers;
 
-        protected BaseRequestHandler(IPreProcessHandler<TRequest, TResponse> preProcessHandler)
+        protected BaseRequestHandler(IEnumerable<IPreProcessHandler<TRequest, TResponse>> preProcessHandlers)
         {
-            _preProcessHandler = preProcessHandler;
+            _preProcessHandlers = preProcessHandlers;
         }
 
-        public async Task<TResponse> HandleAsync(TRequest request, CancellationToken ct = default)
+        public Task<TResponse> HandleAsync(TRequest request, CancellationToken ct = default)
         {
-            return await _preProcessHandler.HandleAsync(request, HandlerInternalAsync, ct);
+            Task<TResponse> handler() => HandlerInternalAsync(request, ct);
+
+            return _preProcessHandlers
+                .Aggregate(
+                    (RequestHandlerDelegate<TResponse>)handler,
+                    (next, pipeline) => () => pipeline.HandleAsync(request, next, ct)
+                )();
         }
 
         protected abstract Task<TResponse> HandlerInternalAsync(TRequest request, CancellationToken ct);

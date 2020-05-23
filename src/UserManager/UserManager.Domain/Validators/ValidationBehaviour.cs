@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,7 +17,7 @@ namespace UserManager.Domain.Validators
             _validators = validators;
         }
 
-        public Task HandleAsync(TRequest request, Func<TRequest, CancellationToken, Task> next, CancellationToken ct = default)
+        public Task HandleAsync(TRequest request, RequestHandlerDelegate next, CancellationToken ct = default)
         {
             var context = new ValidationContext(request);
             var failures = _validators
@@ -32,7 +31,7 @@ namespace UserManager.Domain.Validators
                 throw new ValidationException(failures);
             }
 
-            return next(request, ct);
+            return next();
         }
     }
 }
