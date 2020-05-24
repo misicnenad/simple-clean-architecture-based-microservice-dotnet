@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AccountManager.Domain.Interfaces;
 using AccountManager.Domain.Models;
 using AccountManager.Infrastructure.Models;
 using AccountManager.Infrastructure.Services;
@@ -13,26 +12,14 @@ using Xunit;
 
 namespace AccountManager.Tests.UnitTests.Infrastructure
 {
-    public class AccountServiceTests : IAsyncDisposable
+    public class AccountServiceTests
     {
-        private readonly Mock<IMapper> _mockMapper;
-        private readonly AccountManagerDbContext _dbContext;
-
-        public AccountServiceTests()
-        {
-            _mockMapper = new Mock<IMapper>();
-
-            var options = new DbContextOptionsBuilder<AccountManagerDbContext>()
+        private readonly DbContextOptions<AccountManagerDbContext> _options = 
+            new DbContextOptionsBuilder<AccountManagerDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
 
-            _dbContext = new AccountManagerDbContext(options);
-        }
-
-        async ValueTask IAsyncDisposable.DisposeAsync()
-        {
-            await _dbContext.DisposeAsync();
-        }
+        private readonly Mock<IMapper> _mockMapper = new Mock<IMapper>();
 
         [Fact]
         public async Task AddAsync_Successful()
@@ -63,7 +50,8 @@ namespace AccountManager.Tests.UnitTests.Infrastructure
             _mockMapper.Setup(m => m.Map<Account>(It.IsAny<AccountDbo>()))
                 .Returns(expectedAccount);
 
-            var service = new AccountService(_mockMapper.Object, _dbContext);
+            using var dbContext = new AccountManagerDbContext(_options);
+            var service = new AccountService(_mockMapper.Object, dbContext);
 
             // Act
             var correlationId = Guid.NewGuid();
@@ -101,7 +89,8 @@ namespace AccountManager.Tests.UnitTests.Infrastructure
                 account1,
                 account2
             };
-            _dbContext.Accounts.AddRange(accountDbos);
+            using var dbContext = new AccountManagerDbContext(_options);
+            dbContext.Accounts.AddRange(accountDbos);
 
             var expectedAccounts = new List<Account>
             {
@@ -125,7 +114,7 @@ namespace AccountManager.Tests.UnitTests.Infrastructure
                         It.Is<List<AccountDbo>>(accounts => accounts.All(a => accountDbos.Contains(a)))))
                 .Returns(expectedAccounts);
 
-            var service = new AccountService(_mockMapper.Object, _dbContext);
+            var service = new AccountService(_mockMapper.Object, dbContext);
 
             // Act
             var actualAccounts = await service.GetAllByUserIdAsync(correlationId: Guid.NewGuid(), userId);
@@ -157,7 +146,8 @@ namespace AccountManager.Tests.UnitTests.Infrastructure
                     DateCreated = DateTime.UtcNow
                 },
             };
-            _dbContext.Accounts.AddRange(accountDbos);
+            using var dbContext = new AccountManagerDbContext(_options);
+            dbContext.Accounts.AddRange(accountDbos);
 
             var expectedAccounts = new List<Account>();
             _mockMapper.Setup(
@@ -165,7 +155,7 @@ namespace AccountManager.Tests.UnitTests.Infrastructure
                         It.Is<List<AccountDbo>>(accountDbos => !accountDbos.Any())))
                 .Returns(expectedAccounts);
 
-            var service = new AccountService(_mockMapper.Object, _dbContext);
+            var service = new AccountService(_mockMapper.Object, dbContext);
 
             // Act
             var nonExistentUserId = 3;
