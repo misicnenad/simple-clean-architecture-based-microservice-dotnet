@@ -35,4 +35,9 @@
     <ProjectReference Include="..\UserManager.Infrastructure\UserManager.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Unit\Domain\" />
+    <Folder Include="Unit\Infrastructure\" />
+  </ItemGroup>
+
 </Project>
