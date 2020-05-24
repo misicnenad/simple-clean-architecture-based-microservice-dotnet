@@ -5,19 +5,22 @@ using System.Linq;
 
 namespace UserManager.Domain
 {
-    public abstract class BaseRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
+    public abstract class BaseRequestHandler<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
         private readonly IEnumerable<IPreProcessHandler<TRequest, TResponse>> _preProcessHandlers;
+        private readonly IRequestHandler<TRequest, TResponse> _requestHandler;
 
-        protected BaseRequestHandler(IEnumerable<IPreProcessHandler<TRequest, TResponse>> preProcessHandlers)
+        protected BaseRequestHandler(
+            IEnumerable<IPreProcessHandler<TRequest, TResponse>> preProcessHandlers, 
+            IRequestHandler<TRequest, TResponse> requestHandler)
         {
             _preProcessHandlers = preProcessHandlers;
+            _requestHandler = requestHandler;
         }
 
         public Task<TResponse> HandleAsync(TRequest request, CancellationToken ct = default)
         {
-            Task<TResponse> handler() => HandlerInternalAsync(request, ct);
+            Task<TResponse> handler() => _requestHandler.HandleAsync(request, ct);
 
             return _preProcessHandlers
                 .Aggregate(
@@ -25,7 +28,5 @@ namespace UserManager.Domain
                     (next, pipeline) => () => pipeline.HandleAsync(request, next, ct)
                 )();
         }
-
-        protected abstract Task<TResponse> HandlerInternalAsync(TRequest request, CancellationToken ct = default);
     }
 }

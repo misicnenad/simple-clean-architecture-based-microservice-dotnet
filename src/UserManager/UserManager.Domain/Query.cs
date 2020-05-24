@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UserManager.Domain.Queries
+namespace UserManager.Domain
 {
     public abstract class Query<TResult> : IRequest<TResult>
     {

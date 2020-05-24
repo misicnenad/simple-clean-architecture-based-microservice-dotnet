@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UserManager.Domain.Commands
+namespace UserManager.Domain
 {
     public abstract class Command : Command<Void>
     {

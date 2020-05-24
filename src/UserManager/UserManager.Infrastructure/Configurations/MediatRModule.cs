@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using MediatR;
-using UserManager.Domain.Commands;
 
 namespace UserManager.Infrastructure.Configurations
 {
@@ -11,10 +10,12 @@ namespace UserManager.Infrastructure.Configurations
             builder.RegisterAssemblyTypes(typeof(IMediator).Assembly)
                 .AsImplementedInterfaces();
 
-            builder.RegisterRequestHandlers();
+            var domainRequestHandlerType = typeof(Domain.IRequestHandler<,>);
+            
+            builder.RegisterRequestHandlers(domainRequestHandlerType.Assembly);
 
-            builder.RegisterAssemblyTypes(typeof(Command).Assembly)
-                .AsClosedTypesOf(typeof(Domain.IRequestHandler<,>));
+            builder.RegisterAssemblyTypes(domainRequestHandlerType.Assembly)
+                .AsClosedTypesOf(domainRequestHandlerType);
 
             builder.Register<ServiceFactory>(ctx =>
             {

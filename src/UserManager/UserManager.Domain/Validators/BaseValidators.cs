@@ -1,6 +1,4 @@
-﻿using UserManager.Domain.Commands;
-using UserManager.Domain.Queries;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace UserManager.Domain.Validators
 {
