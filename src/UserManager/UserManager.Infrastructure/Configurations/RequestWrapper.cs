@@ -4,18 +4,18 @@ using MediatR;
 
 namespace UserManager.Infrastructure.Configurations
 {
-    public class RequestHandlerWrapper<TRequest, TType, TResponse> : IRequestHandler<TRequest, TResponse>
-        where TRequest : RequestWrapper<TType, TResponse>
-        where TType : Domain.IRequest<TResponse>
+    public class RequestHandlerWrapper<TRequestWrapper, TRequest, TResponse>: IRequestHandler<TRequestWrapper, TResponse>
+        where TRequestWrapper : RequestWrapper<TRequest, TResponse>
+        where TRequest : Domain.IRequest<TResponse>
     {
-        private readonly Domain.IRequestHandler<TType, TResponse> _requestHandler;
+        private readonly Domain.IRequestHandler<TRequest, TResponse> _requestHandler;
 
-        public RequestHandlerWrapper(Domain.IRequestHandler<TType, TResponse> requestHandler)
+        public RequestHandlerWrapper(Domain.IRequestHandler<TRequest, TResponse> requestHandler)
         {
             _requestHandler = requestHandler;
         }
 
-        public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken = default)
+        public Task<TResponse> Handle(TRequestWrapper request, CancellationToken cancellationToken = default)
         {
             return _requestHandler.HandleAsync(request.Request, cancellationToken);
         }

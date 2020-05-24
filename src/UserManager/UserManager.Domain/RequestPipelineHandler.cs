@@ -5,13 +5,13 @@ using System.Linq;
 
 namespace UserManager.Domain
 {
-    public abstract class BaseRequestHandler<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    public abstract class RequestPipelineHandler<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
         private readonly IEnumerable<IPreProcessHandler<TRequest, TResponse>> _preProcessHandlers;
         private readonly IRequestHandler<TRequest, TResponse> _requestHandler;
 
-        protected BaseRequestHandler(
-            IEnumerable<IPreProcessHandler<TRequest, TResponse>> preProcessHandlers, 
+        protected RequestPipelineHandler(
+            IEnumerable<IPreProcessHandler<TRequest, TResponse>> preProcessHandlers,
             IRequestHandler<TRequest, TResponse> requestHandler)
         {
             _preProcessHandlers = preProcessHandlers;
@@ -24,7 +24,7 @@ namespace UserManager.Domain
 
             return _preProcessHandlers
                 .Aggregate(
-                    (RequestHandlerDelegate<TResponse>)handler,
+                    (RequestHandlerDelegate<TResponse>) handler,
                     (next, pipeline) => () => pipeline.HandleAsync(request, next, ct)
                 )();
         }
