@@ -36,7 +36,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Unit\Domain\" />
     <Folder Include="Unit\Infrastructure\" />
   </ItemGroup>
 
