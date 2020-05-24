@@ -8,13 +8,17 @@ namespace UserManager.Domain
         protected Command(Guid correlationId) : base(correlationId) { }
     }
 
-    public abstract class Command<TResponse> : BaseCommand, IRequest<TResponse>
+    public abstract class Command<TResponse> : BaseCommand<TResponse> 
     {
         protected Command() { }
         protected Command(Guid correlationId) : base(correlationId) { }
     }
 
-    public abstract class BaseCommand
+    public abstract class BaseCommand : BaseCommand<Void>
+    {
+    }
+
+    public abstract class BaseCommand<TResponse> : IRequest<TResponse>
     {
         protected BaseCommand()
         {

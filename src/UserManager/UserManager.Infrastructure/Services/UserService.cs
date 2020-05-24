@@ -21,6 +21,17 @@ namespace UserManager.Infrastructure.Services
             _dbContext = dbContext;
         }
 
+        public async Task<User> AddAsync(User user, CancellationToken ct = default)
+        {
+            var userDbo = _mapper.Map<UserDbo>(user);
+            
+            var userEntry = _dbContext.Add(userDbo);
+            await _dbContext.SaveChangesAsync(ct);
+
+            var addedUser = _mapper.Map<User>(userEntry.Entity);
+            return addedUser;
+        }
+
         public async Task<IEnumerable<User>> GetAllAsync(CancellationToken ct = default)
         {
             var userDbos = await _dbContext.Users.ToListAsync(ct);

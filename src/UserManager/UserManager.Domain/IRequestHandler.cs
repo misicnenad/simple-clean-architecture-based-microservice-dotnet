@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Threading;
+using System;
 
 namespace UserManager.Domain
 {
@@ -18,7 +19,11 @@ namespace UserManager.Domain
 
     public interface IRequest<out TResponse>
     {
+        public Guid CorrelationId { get; }
     }
 
-    public class Void { }
+    public sealed class Void 
+    {
+        public static Void Value => new Void();
+    }
 }

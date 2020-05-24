@@ -1,5 +1,4 @@
 ﻿using UserManager.Domain;
-using UserManager.Domain.Providers;
 using UserManager.Domain.Validators;
 
 using Autofac;
@@ -7,6 +6,7 @@ using Autofac;
 using FluentValidation;
 using UserManager.Infrastructure.Services;
 using UserManager.Domain.Interfaces;
+using UserManager.Infrastructure.Providers;
 
 namespace UserManager.Infrastructure.Configurations
 {
@@ -24,7 +24,7 @@ namespace UserManager.Infrastructure.Configurations
             builder.RegisterGeneric(typeof(ValidationBehavior<>))
                   .As(typeof(IPreProcessHandler<>));
 
-            builder.RegisterType<DateTimeProvider>().SingleInstance();
+            builder.RegisterType<DateTimeProvider>().As<IDateTimeProvider>().SingleInstance();
         }
     }
 }
