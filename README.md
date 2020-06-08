@@ -1,5 +1,5 @@
-# A Simple Clean Architecture Based Microservice (.NET)
-A simple "Clean Architecture" based microservices, written in .NET, created as a simple reference on how things can, to put it in simple terms, be done simply.
+# Simple Clean Architecture Based Microservices (.NET)
+Simple "Clean Architecture" based microservices, written in .NET, created as a simple reference on how things can, to put it in simple terms, be done simply.
 
 <i>Created for personal and community's knowledge reference.</i>
 
